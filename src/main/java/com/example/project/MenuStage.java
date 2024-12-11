@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 public class MenuStage {
 
     public void show() {
-        Stage menuStage = new Stage();
+        Stage menuStage = new Stage();  // Declare and initialize menuStage
 
         // Root layout
         VBox root = new VBox(20);
@@ -32,7 +32,7 @@ public class MenuStage {
         Button addButton = new Button("ADD A NEW STUDENT RECORD");
         addButton.setStyle(buttonStyle);
         addButton.setFont(Font.font("Arial", 14));
-        addButton.setOnAction(e -> handleAddStudentAction());
+        addButton.setOnAction(e -> handleAddStudentAction(menuStage));  // Pass menuStage to handleAddStudentAction
 
         Button updateButton = new Button("UPDATE A STUDENT RECORD");
         updateButton.setStyle(buttonStyle);
@@ -58,22 +58,20 @@ public class MenuStage {
         menuStage.show();
     }
 
-    private void handleAddStudentAction() {
-        new AddStudentStage().show();
+    private void handleAddStudentAction(Stage menuStage) {
+        menuStage.close();  // Close the current menu stage
+        new AddStudentStage(menuStage).show();  // Open the AddStudentStage with menuStage reference
     }
 
     private void handleUpdateStudentAction() {
-        new UpdateStudentStage().show();
+        // Logic for updating student records
     }
-
 
     private void handleDeleteStudentAction() {
-        new DeleteStudentStage().show();
+        // Logic for deleting student records
     }
-
 
     private void handleViewLiveInStudents() {
-        new ViewLiveInStudentsStage().show();
+        // Logic for viewing live-in student records
     }
 }
-

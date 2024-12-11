@@ -4,6 +4,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.BufferedWriter;
@@ -11,6 +12,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class AddStudentStage {
+
+    private Stage menuStage;  // Reference to the MenuStage
+
+    public AddStudentStage(Stage menuStage) {
+        this.menuStage = menuStage;  // Save reference to menuStage passed from MenuStage
+    }
 
     public void show() {
         // Create a new stage for adding student details
@@ -84,11 +91,24 @@ public class AddStudentStage {
             }
         });
 
+        // Back Button (Top Right Corner)
+        Button backButton = new Button("Back");
+        backButton.setStyle("-fx-background-color: #4569a0; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 20px; -fx-border-radius: 8px;");
+        backButton.setOnAction(e -> {
+            addStudentStage.close();  // Close the AddStudentStage
+            menuStage.show();  // Show the MenuStage again
+        });
+
+        // Create an HBox to position the Back button at the top-right
+        HBox topBar = new HBox();
+        topBar.setAlignment(Pos.TOP_RIGHT); // Align the button to the top-right
+        topBar.getChildren().add(backButton); // Add the Back button to the top bar
+
         // Add all components to the layout
-        layout.getChildren().addAll(nameLabel, nameField, guardianNameLabel, guardianNameField, ageLabel, ageField, cnicLabel, cnicField, addButton);
+        layout.getChildren().addAll(topBar, nameLabel, nameField, guardianNameLabel, guardianNameField, ageLabel, ageField, cnicLabel, cnicField, addButton);
 
         // Create and show the scene for the add student stage
-        Scene scene = new Scene(layout, 500, 400); // Adjusted scene size
+        Scene scene = new Scene(layout, 600, 500); // Adjusted scene size
         addStudentStage.setScene(scene);
         addStudentStage.setTitle("Add New Student");
         addStudentStage.show();
@@ -102,4 +122,3 @@ public class AddStudentStage {
         alert.showAndWait();
     }
 }
-
