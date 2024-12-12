@@ -29,7 +29,7 @@ public class Main extends Application {
         Label title = new Label("HOSTEL MANAGEMENT SYSTEM");
         title.setFont(Font.font("Arial", 36));
         title.setTextFill(Color.WHITE);
-        title.setLayoutX(200);
+        title.setLayoutX(150);
         title.setLayoutY(50);
 
         // Login Form Container
@@ -65,38 +65,69 @@ public class Main extends Application {
         loginBox.getChildren().addAll(usernameLabel, userField, passwordLabel, passwordField, loginButton, signUpButton);
         root.getChildren().addAll(title, loginBox);
 
-        // Login Button Action
         loginButton.setOnAction(e -> {
             String username = userField.getText();
             String password = passwordField.getText();
 
-            try (BufferedReader reader = new BufferedReader(new FileReader("user.txt"))) {
-                String line;
-                boolean userFound = false;
-                while ((line = reader.readLine()) != null) {
-                    String[] credentials = line.split(",");
-                    if (credentials[0].equalsIgnoreCase(username) && credentials[1].equals(password)) {
-                        userFound = true;
+            // Check if username or password is empty
+            if (username.isEmpty() || password.isEmpty()) {
+                showAlert("Input Error", "Username and password fields cannot be empty", Alert.AlertType.WARNING);
+                return;
+            }
 
-                        // Open MenuStage and close the login stage
-                        new MenuStage().show();
-                        primaryStage.close();
-                        break;
-                    }
+            try {
+                java.io.File file = new java.io.File("user.txt");
+
+                // Check if file exists
+                if (!file.exists()) {
+                    showAlert("File Error", "User data file does not exist", Alert.AlertType.ERROR);
+                    return;
                 }
-                if (!userFound) {
-                    showAlert("Login Failed", "Invalid username or password", Alert.AlertType.ERROR);
+
+                // Check if file is empty
+                if (file.length() == 0) {
+                    showAlert("File Error", "User data file is empty", Alert.AlertType.ERROR);
+                    return;
+                }
+
+                // Read and validate credentials
+                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    boolean userFound = false;
+                    while ((line = reader.readLine()) != null) {
+                        String[] credentials = line.split(",");
+                        if (credentials.length >= 2 && credentials[0].equalsIgnoreCase(username) && credentials[1].equals(password)) {
+                            userFound = true;
+
+                            // Open MenuStage and close the login stage
+                            Manage manageStage = new Manage();
+                            manageStage.show(primaryStage);
+                            return;
+                        }
+                    }
+
+                    if (!userFound) {
+                        showAlert("Login Failed", "Invalid username or password", Alert.AlertType.ERROR);
+                    }
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
-                showAlert("Error", "Unable to read user data", Alert.AlertType.ERROR);
+                showAlert("Error", "An unexpected error occurred while accessing the user data file", Alert.AlertType.ERROR);
             }
         });
 
-        // Sign Up Button Action
         signUpButton.setOnAction(e -> {
+            String username = userField.getText();
+            String password = passwordField.getText();
+
+            // Check if username or password is empty
+            if (username.isEmpty() || password.isEmpty()) {
+                showAlert("Input Error", "Username and password fields cannot be empty", Alert.AlertType.WARNING);
+                return;
+            }
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("user.txt", true))) {
-                String data = userField.getText() + "," + passwordField.getText() + System.lineSeparator();
+                String data = username + "," + password + System.lineSeparator();
                 writer.write(data);
                 showAlert("Sign Up Successful", "You can now log in with your credentials.", Alert.AlertType.INFORMATION);
             } catch (IOException ex) {

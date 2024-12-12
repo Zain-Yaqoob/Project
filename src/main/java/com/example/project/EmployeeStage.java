@@ -9,17 +9,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class MenuStage {
+public class EmployeeStage {
 
     private final Stage previousStage; // Store reference to the previous stage
 
     // Constructor to accept the previous stage (Manage stage)
-    public MenuStage(Stage previousStage) {
+    public EmployeeStage(Stage previousStage) {
         this.previousStage = previousStage;
     }
 
     public void show() {
-        Stage menuStage = new Stage();
+        Stage employeeStage = new Stage();
 
         // Root layout
         VBox root = new VBox(20);
@@ -35,14 +35,14 @@ public class MenuStage {
         Button backButton = new Button("Back");
         backButton.setStyle("-fx-background-color: #e84545; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px; -fx-background-radius: 8px;");
         backButton.setOnAction(e -> {
-            menuStage.close(); // Close the current stage
+            employeeStage.close(); // Close the current stage
             new Manage().show(previousStage); // Show the Manage stage
         });
 
         // Add Back Button to the Top Bar
         topBar.getChildren().add(backButton);
 
-        // Button style
+        // Button style (similar to MenuStage)
         String buttonStyle = "-fx-background-color: linear-gradient(to bottom right, #000428, #004e92);"
                 + "-fx-text-fill: white;"
                 + "-fx-font-size: 16px;"
@@ -52,53 +52,53 @@ public class MenuStage {
                 + "-fx-pref-width: 300;";
 
         // Buttons
-        Button addButton = new Button("ADD A NEW STUDENT RECORD");
+        Button addButton = new Button("ADD A NEW EMPLOYEE RECORD");
         addButton.setStyle(buttonStyle);
         addButton.setFont(Font.font("Arial", 14));
-        addButton.setOnAction(e -> handleAddStudentAction(menuStage));
+        addButton.setOnAction(e -> handleAddEmployeeAction(employeeStage));
 
-        Button updateButton = new Button("UPDATE A STUDENT RECORD");
+        Button updateButton = new Button("UPDATE AN EMPLOYEE RECORD");
         updateButton.setStyle(buttonStyle);
         updateButton.setFont(Font.font("Arial", 14));
-        updateButton.setOnAction(e -> handleUpdateStudentAction(menuStage));
+        updateButton.setOnAction(e -> handleUpdateEmployeeAction(employeeStage));
 
-        Button deleteButton = new Button("DELETE A STUDENT RECORD");
+        Button deleteButton = new Button("DELETE AN EMPLOYEE RECORD");
         deleteButton.setStyle(buttonStyle);
         deleteButton.setFont(Font.font("Arial", 14));
-        deleteButton.setOnAction(e -> handleDeleteStudentAction(menuStage));
+        deleteButton.setOnAction(e -> handleDeleteEmployeeAction(employeeStage));
 
-        Button viewLiveInButton = new Button("VIEW THE LIVE-IN STUDENT DETAILS");
+        Button viewLiveInButton = new Button("VIEW THE LIVE-IN EMPLOYEE DETAILS");
         viewLiveInButton.setStyle(buttonStyle);
         viewLiveInButton.setFont(Font.font("Arial", 14));
-        viewLiveInButton.setOnAction(e -> handleViewLiveInStudents(menuStage));
+        viewLiveInButton.setOnAction(e -> handleViewLiveInEmployees(employeeStage));
 
         // Add components to the root layout
         root.getChildren().addAll(topBar, addButton, updateButton, deleteButton, viewLiveInButton);
 
         // Scene and stage setup
         Scene scene = new Scene(root, 800, 600);
-        menuStage.setScene(scene);
-        menuStage.setTitle("Menu");
-        menuStage.show();
+        employeeStage.setScene(scene);
+        employeeStage.setTitle("Employee Menu");
+        employeeStage.show();
     }
 
-    private void handleAddStudentAction(Stage menuStage) {
-        menuStage.close();
-        new AddStudentStage(menuStage).show();
+    private void handleAddEmployeeAction(Stage employeeStage) {
+        employeeStage.close();
+        new AddEmployeeStage(employeeStage).show();
     }
 
-    private void handleUpdateStudentAction(Stage menuStage) {
-        menuStage.close();
-        new UpdateStudentStage(menuStage).show();
+    private void handleUpdateEmployeeAction(Stage employeeStage) {
+        employeeStage.close();
+        new UpdateEmployeeStage(employeeStage).show();
     }
 
-    private void handleDeleteStudentAction(Stage menuStage) {
-        menuStage.close();
-        new DeleteStudentStage(menuStage).show();
+    private void handleDeleteEmployeeAction(Stage employeeStage) {
+        employeeStage.close();
+        new DeleteEmployeeStage(employeeStage).show();
     }
 
-    private void handleViewLiveInStudents(Stage menuStage) {
-        menuStage.close();
-        new ViewLiveInStudentsStage(menuStage).show();
+    private void handleViewLiveInEmployees(Stage employeeStage) {
+        employeeStage.close();
+        new ViewLiveInEmployeesStage(employeeStage).show();
     }
 }

@@ -12,17 +12,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class UpdateStudentStage {
+public class UpdateEmployeeStage {
 
     private Stage menuStage;  // Reference to the MenuStage
 
-    public UpdateStudentStage(Stage menuStage) {
+    public UpdateEmployeeStage(Stage menuStage) {
         this.menuStage = menuStage;  // Save reference to menuStage passed from MenuStage
     }
 
     public void show() {
-        // Create a new stage for updating student details
-        Stage updateStudentStage = new Stage();
+        // Create a new stage for updating employee details
+        Stage updateEmployeeStage = new Stage();
 
         // Create a VBox layout to organize the form fields
         VBox layout = new VBox(15); // 15px spacing between fields
@@ -32,24 +32,20 @@ public class UpdateStudentStage {
         // Define a universal label style
         String labelStyle = "-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;";
 
-        // Label and TextField to search by student's ID
-        Label searchLabel = new Label("Enter Student ID to Update:");
+        // Label and TextField to search by employee's ID
+        Label searchLabel = new Label("Enter Employee ID to Update:");
         searchLabel.setStyle(labelStyle);
         TextField searchField = new TextField();
-        searchField.setPromptText("Student ID");
+        searchField.setPromptText("Employee ID");
 
-        // Button to search the student
+        // Button to search the employee
         Button searchButton = new Button("Search");
         searchButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 20px; -fx-border-radius: 8px;");
 
-        // Create fields for displaying and updating student details (now editable)
+        // Create fields for displaying and updating employee details (now editable)
         Label nameLabel = new Label("Name:");
         nameLabel.setStyle(labelStyle);
         TextField nameField = new TextField();
-
-        Label guardianNameLabel = new Label("Guardian Name:");
-        guardianNameLabel.setStyle(labelStyle);
-        TextField guardianNameField = new TextField();
 
         Label ageLabel = new Label("Age:");
         ageLabel.setStyle(labelStyle);
@@ -59,38 +55,30 @@ public class UpdateStudentStage {
         cnicLabel.setStyle(labelStyle);
         TextField cnicField = new TextField();
 
-        // Create an "Update" button to save the updated student details
+        // Create an "Update" button to save the updated employee details
         Button updateButton = new Button("Update");
         updateButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 20px; -fx-border-radius: 8px;");
-        updateButton.setDisable(true); // Initially disabled until the student is found
+        updateButton.setDisable(true); // Initially disabled until the employee is found
 
-        // Create a "Display" button to view live information in a new stage
+        // Create a "Display" button to view employee data
         Button displayButton = new Button("Display");
-        displayButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 20px; -fx-border-radius: 8px;");
-
-        // Event handler for search button
-        searchButton.setOnAction(e -> handleSearchAction(searchField, nameField, guardianNameField, ageField, cnicField, updateButton));
-
-        // Event handler for update button
-        updateButton.setOnAction(e -> handleUpdateAction(searchField, nameField, guardianNameField, ageField, cnicField, updateButton));
-
-        // Event handler for display button
+        displayButton.setStyle("-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 20px; -fx-border-radius: 8px;");
         displayButton.setOnAction(e -> {
-            updateStudentStage.close();
-            ViewLiveInStudentsStage viewLiveInStudentStage = new ViewLiveInStudentsStage(updateStudentStage);
-            viewLiveInStudentStage.show();
+            updateEmployeeStage.close();
+            new ViewLiveInEmployeesStage(updateEmployeeStage).show();
         });
 
-        // Create an HBox for the Update and Display buttons
-        HBox buttonBox = new HBox(10); // 10px spacing between buttons
-        buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.getChildren().addAll(updateButton, displayButton);
+        // Event handler for search button
+        searchButton.setOnAction(e -> handleSearchAction(searchField, nameField, ageField, cnicField, updateButton));
+
+        // Event handler for update button
+        updateButton.setOnAction(e -> handleUpdateAction(searchField, nameField, ageField, cnicField, updateButton));
 
         // Back Button (Top Right Corner)
         Button backButton = new Button("Back");
         backButton.setStyle("-fx-background-color: #4569a0; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 20px; -fx-border-radius: 8px;");
         backButton.setOnAction(e -> {
-            updateStudentStage.close();  // Close the UpdateStudentStage
+            updateEmployeeStage.close();  // Close the UpdateEmployeeStage
             menuStage.show();  // Show the MenuStage again
         });
 
@@ -99,40 +87,43 @@ public class UpdateStudentStage {
         topBar.setAlignment(Pos.TOP_RIGHT); // Align the button to the top-right
         topBar.getChildren().add(backButton); // Add the Back button to the top bar
 
+        // Create an HBox for the Update and Display buttons
+        HBox actionButtons = new HBox(10); // 10px spacing between buttons
+        actionButtons.setAlignment(Pos.CENTER);
+        actionButtons.getChildren().addAll(updateButton, displayButton);
+
         // Add all components to the layout
         layout.getChildren().addAll(topBar, searchLabel, searchField, searchButton,
                 nameLabel, nameField,
-                guardianNameLabel, guardianNameField,
                 ageLabel, ageField,
                 cnicLabel, cnicField,
-                buttonBox);
+                actionButtons);
 
-        // Create and show the scene for the update student stage
+        // Create and show the scene for the update employee stage
         Scene scene = new Scene(layout, 600, 600);
-        updateStudentStage.setScene(scene);
-        updateStudentStage.setTitle("Update Student Record");
-        updateStudentStage.show();
+        updateEmployeeStage.setScene(scene);
+        updateEmployeeStage.setTitle("Update Employee Record");
+        updateEmployeeStage.show();
     }
 
-    private void handleSearchAction(TextField searchField, TextField nameField, TextField guardianNameField, TextField ageField, TextField cnicField, Button updateButton) {
+    private void handleSearchAction(TextField searchField, TextField nameField, TextField ageField, TextField cnicField, Button updateButton) {
         String searchID = searchField.getText().trim();
         if (searchID.isEmpty()) {
-            showAlert("Error", "Student ID is required", "Please enter a student ID to search.", Alert.AlertType.ERROR);
+            showAlert("Error", "Employee ID is required", "Please enter an employee ID to search.", Alert.AlertType.ERROR);
             return;
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("Students.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("Employees.txt"))) {
             String line;
             boolean found = false;
 
             while ((line = reader.readLine()) != null) {
-                String[] studentData = line.split(",");
-                if (studentData[0].equals(searchID)) {
+                String[] employeeData = line.split(",");
+                if (employeeData[0].equals(searchID)) {
                     // Populate the fields with existing data
-                    nameField.setText(studentData[1]);
-                    guardianNameField.setText(studentData[2]);
-                    ageField.setText(studentData[3]);
-                    cnicField.setText(studentData[4]);
+                    nameField.setText(employeeData[1]);
+                    ageField.setText(employeeData[2]);
+                    cnicField.setText(employeeData[3]);
                     updateButton.setDisable(false); // Enable the update button
                     found = true;
                     break;
@@ -140,57 +131,55 @@ public class UpdateStudentStage {
             }
 
             if (!found) {
-                showAlert("Student Not Found", "Student Not Found", "No student found with the ID: " + searchID, Alert.AlertType.ERROR);
+                showAlert("Employee Not Found", "Employee Not Found", "No employee found with the ID: " + searchID, Alert.AlertType.ERROR);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-            showAlert("Error", "Failed to Search", "There was an error searching for the student.", Alert.AlertType.ERROR);
+            showAlert("Error", "Failed to Search", "There was an error searching for the employee.", Alert.AlertType.ERROR);
         }
     }
 
-    private void handleUpdateAction(TextField searchField, TextField nameField, TextField guardianNameField, TextField ageField, TextField cnicField, Button updateButton) {
+    private void handleUpdateAction(TextField searchField, TextField nameField, TextField ageField, TextField cnicField, Button updateButton) {
         String searchID = searchField.getText().trim();
         String newName = nameField.getText().trim();
-        String guardianName = guardianNameField.getText().trim();
         String age = ageField.getText().trim();
         String cnic = cnicField.getText().trim();
 
-        if (newName.isEmpty() || guardianName.isEmpty() || age.isEmpty() || cnic.isEmpty()) {
+        if (newName.isEmpty() || age.isEmpty() || cnic.isEmpty()) {
             showAlert("Error", "All fields are required", "Please fill in all the fields.", Alert.AlertType.ERROR);
             return;
         }
 
         try {
-            List<String> lines = Files.readAllLines(Paths.get("Students.txt"));
+            List<String> lines = Files.readAllLines(Paths.get("Employees.txt"));
             boolean updated = false;
 
             for (int i = 0; i < lines.size(); i++) {
-                String[] studentData = lines.get(i).split(",");
-                if (studentData[0].equals(searchID)) {
-                    lines.set(i, searchID + "," + newName + "," + guardianName + "," + age + "," + cnic);
+                String[] employeeData = lines.get(i).split(",");
+                if (employeeData[0].equals(searchID)) {
+                    lines.set(i, searchID + "," + newName + "," + age + "," + cnic);
                     updated = true;
                     break;
                 }
             }
 
             if (updated) {
-                Files.write(Paths.get("Students.txt"), lines);
-                showAlert("Success", "Student Updated", "The student's record has been updated successfully.", Alert.AlertType.INFORMATION);
+                Files.write(Paths.get("Employees.txt"), lines);
+                showAlert("Success", "Employee Updated", "The employee's record has been updated successfully.", Alert.AlertType.INFORMATION);
 
                 // Clear the fields and keep the stage open for further updates
                 nameField.clear();
-                guardianNameField.clear();
                 ageField.clear();
                 cnicField.clear();
 
                 // Optionally, disable the update button again after update
                 updateButton.setDisable(true);
             } else {
-                showAlert("Error", "Update Failed", "No matching student found to update.", Alert.AlertType.ERROR);
+                showAlert("Error", "Update Failed", "No matching employee found to update.", Alert.AlertType.ERROR);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-            showAlert("Error", "Failed to Update", "There was an error updating the student record.", Alert.AlertType.ERROR);
+            showAlert("Error", "Failed to Update", "There was an error updating the employee record.", Alert.AlertType.ERROR);
         }
     }
 

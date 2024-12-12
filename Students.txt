@@ -1,7 +1,0 @@
-Muhammad Ali Raheel,Muhammad Yaqoob,40,35201-7963057-5
-Rayyan Ali,Muhammad Yaqoob,40,35201-7963057-5
-dfd,gfdgfd,dsadas,dsadas
-Ali Iqbal,sdads,dasdsa,sadasd
-Ali Kamran,sdsa,dasd,dsada
-Zain Yaqoob,Muhammad Yaqoob,232,123131
-Zain,Muhammad Yaqoob,23,324
